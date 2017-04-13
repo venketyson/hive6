@@ -1,0 +1,46 @@
+creating a hive table:
+
+
+
+create table temp (station string,date string,observation string,temp string)
+row format delimited 
+fields terminated by ',';
+
+
+loading the data into table
+
+load data local inpath '/home/acadgild/temperature.csv' into table temp;
+
+
+to convert the date format we tranfer the date to anothr table:
+
+
+create table temp1 (station string,date string,observation string,temp string)
+row format delimited 
+fields terminated by ',';
+
+
+
+insert into table temp1 select station,from_unixtime(unix_timestamp(Date,'yyyymmdd'),'yyyy-mm-dd'),observation,temp from temp;
+
+
+
+
+query1:
+
+
+select min(temp) from temp1 where observation='TMIN' and station='ITE00100554' ;
+
+
+query2:
+
+
+
+select max(temp) from temp1 where observation='TMAX' and station='ITE00100554' ;
+
+
+
+query 3:
+
+
+select station,count(observation) from temp1 group by station;
